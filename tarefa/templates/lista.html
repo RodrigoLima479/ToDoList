@@ -1,0 +1,87 @@
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade ToDoList</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        
+        .custom-list-group .list-group-item {
+            background-color: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            transition: background-color 0.3s; 
+        }
+
+        .custom-list-group .list-group-item:hover {
+            background-color: #e2e6ea; 
+        }
+
+    </style>
+</head>
+
+<body class="bg-light"> 
+    <div class="container bg-white rounded shadow p-4 mt-4">
+        <div class="list-group p-4 custom-list-group">
+            <div class="list-group-item bg-light border-bottom"> 
+                <div class="row align-items-center">
+                    <div class="col text-center">
+                        <h1 class="mb-0 display-4">Lista de Tarefas</h1>
+                    </div>
+                    <div class="col-auto text-end">
+                        <a class="btn btn-primary btn-lg" href="{% url 'nova' %}">Nova Tarefa</a>
+                    </div>
+                </div>
+            </div>
+            {% if tarefas %}
+            {% for tarefa in tarefas %}
+            {% load static %}
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        <div class="fw-bold">{{ tarefa.nome_tarefa }}</div>
+                        <div class="text-muted">{{ tarefa.descricao }}</div> 
+                    </div>
+                    <div class="col-2 text-bottom d-flex align-items-center">
+                        <p class="mb-0">Status: 
+                            <span class="{% if tarefa.status == 'em_andamento' %}bg-info text-white p-1 rounded{% elif tarefa.status == 'finalizada' %}bg-success text-white p-1 rounded{% endif %}">
+                                {%if tarefa.status == 'em_andamento'%}
+                                    Em andamento
+                                {%else%}
+                                    Finalizada
+                                {%endif%}
+                            </span>
+                        </p> 
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                        <p class="mb-0">Criada: {{ tarefa.date }}</p> 
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'atualizar' tarefa.pk %}">
+                            <img src="{% static 'icon/editar.png' %}" width="32" height="32" alt="Editar tarefa" title="Editar tarefa">
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="{% url 'deletar' tarefa.pk %}">
+                            <img src="{% static 'icon/deletar.png' %}" width="32" height="32" alt="Deletar tarefa" title="Deletar tarefa">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="list-group-item">Nenhuma tarefa encontrada.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+{% endblock %}
